@@ -35,6 +35,11 @@ class Chat(TeleBotBase):
 
 
 class Message(TeleBotBase):
+    def __init__(self, **kwargs):
+        if "from" in kwargs:
+            kwargs["from_user"] = kwargs.pop("from")
+        super().__init__(**kwargs)
+
     @property
     def content_type(self):
         for key in (
@@ -63,11 +68,17 @@ class Update(TeleBotBase):
 
 
 class CallbackQuery(TeleBotBase):
-    pass
+    def __init__(self, **kwargs):
+        if "from" in kwargs:
+            kwargs["from_user"] = kwargs.pop("from")
+        super().__init__(**kwargs)
 
 
 class InlineQuery(TeleBotBase):
-    pass
+    def __init__(self, **kwargs):
+        if "from" in kwargs:
+            kwargs["from_user"] = kwargs.pop("from")
+        super().__init__(**kwargs)
 
 
 class File(TeleBotBase):

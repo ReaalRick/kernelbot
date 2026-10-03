@@ -6,7 +6,7 @@ Get a token from @BotFather inside the KernelGram app, put it below, run:
 
 import kernelbot
 
-TOKEN = "PUT_YOUR_TOKEN_HERE"
+TOKEN = "1780243574:Sc-bb9Isumc8wg4edfRGxzcWk1a-Qp9bdKa"
 
 bot = kernelbot.TeleBot(TOKEN, parse_mode=None)
 

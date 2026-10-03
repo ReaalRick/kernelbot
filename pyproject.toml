@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "kernelbot"
-version = "0.0.1"
+version = "0.0.2"
 description = "A simple, but extensible Python implementation for the KernelGram Bot API. Telebot-compatible."
 readme = "README.md"
 requires-python = ">=3.8"
