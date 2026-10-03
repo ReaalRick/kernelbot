@@ -11,6 +11,8 @@
 
 `kernelbot` — это замена [`pyTelegramBotAPI`](https://github.com/eternnoir/pyTelegramBotAPI) (telebot), адаптированная для [KernelGram](https://kernelgram.club) — мессенджера по типу телеграма но со своим сервером. Если у вас есть код под `telebot`, достаточно поменять импорт — и он заработает.
 
+**Автор:** [Morty](https://kernelgram.club/Morty) · [Новостной канал](https://kernelgram.club/Morti) · [Telegram](https://t.me/ReaIRick)
+
 ---
 
 ## Содержание
