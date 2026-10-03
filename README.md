@@ -4,7 +4,7 @@
 
 Простая, но расширяемая реализация **KernelGram Bot API** на Python.
 
-[![PyPI version](https://img.shields.io/badge/pypi-coming%20soon-lightgrey)](https://pypi.org/project/kernelbot/)
+[![PyPI version](https://img.shields.io/pypi/v/kernelbot.svg)](https://pypi.org/project/kernelbot/)
 [![Python](https://img.shields.io/badge/python-3.8%2B-blue)](https://www.python.org/)
 [![License](https://img.shields.io/badge/license-MIT-green)](LICENSE)
 [![KernelGram](https://img.shields.io/badge/platform-KernelGram-2ea44f)](https://kernelgram.club)
