@@ -2,16 +2,20 @@
 
 A simple, but extensible Python implementation for the **KernelGram** Bot API.
 
-`kernelbot` is a drop-in replacement for [`pyTelegramBotAPI`](https://github.com/eternnoir/pyTelegramBotAPI) (telebot), adapted for [KernelGram](https://kernelgram.club) — a Telegram-compatible messenger with its own Bot API server.
+[![PyPI version](https://img.shields.io/badge/pypi-coming%20soon-lightgrey)](https://pypi.org/project/kernelbot/)
+[![Python](https://img.shields.io/badge/python-3.8%2B-blue)](https://www.python.org/)
+[![License](https://img.shields.io/badge/license-MIT-green)](LICENSE)
+[![KernelGram](https://img.shields.io/badge/platform-KernelGram-2ea44f)](https://kernelgram.club)
+
+`kernelbot` is a drop-in replacement for [`pyTelegramBotAPI`](https://github.com/eternnoir/pyTelegramBotAPI) (telebot), adapted for [KernelGram](https://kernelgram.club) — a Telegram-compatible messenger with its own Bot API server. If you have code written for `telebot`, switch the import and it works.
 
 Supported Bot API version: **KernelGram (Telegram-compatible)**
 
-## Official documentation
-
-- KernelGram bots FAQ: https://kernelgram.club/bots
+---
 
 ## Contents
 
+- [Official documentation](#official-documentation)
 - [Getting started](#getting-started)
 - [Writing your first bot](#writing-your-first-bot)
   - [Prerequisites](#prerequisites)
@@ -26,17 +30,35 @@ Supported Bot API version: **KernelGram (Telegram-compatible)**
 - [Migrating from telebot](#migrating-from-telebot)
 - [License](#license)
 
+---
+
+## Official documentation
+
+- KernelGram bots FAQ: https://kernelgram.club/bots
+
+---
+
 ## Getting started
 
 This API is tested with Python 3.8+.
 
 Install using pip:
 
-    $ pip install kernelbot
+```
 
-Or from source:
+pip install kernelbot
 
-    $ pip install git+https://github.com/ReaalRick/kernelbot.git
+```
+
+Or install from source:
+
+```
+
+pip install git+https://github.com/ReaalRick/kernelbot.git
+
+```
+
+---
 
 ## Writing your first bot
 
@@ -68,6 +90,14 @@ bot.infinity_polling()
 
 To start the bot:
 
+```
+python echo_bot.py
+```
+
+Test it by sending /start and arbitrary text messages.
+
+---
+
 General API Documentation
 
 Types
@@ -75,6 +105,8 @@ Types
 All types are defined in kernelbot.types. They follow the KernelGram Bot API definitions, which are compatible with Telegram's.
 
 The Message object has a content_type attribute, one of:
+
+```
 text, audio, document, animation, photo, sticker, video,
 video_note, voice, location, contact, venue, dice,
 new_chat_members, left_chat_member, new_chat_title, new_chat_photo,
@@ -87,10 +119,17 @@ web_app_data, message_auto_delete_timer_changed, forum_topic_created,
 forum_topic_closed, forum_topic_reopened, forum_topic_edited,
 general_forum_topic_hidden, general_forum_topic_unhidden,
 write_access_allowed, user_shared, chat_shared, story.
+```
 
 Methods
 
-All API methods are located in the TeleBot class. Names follow common Python conventions: getMe -> get_me, sendMessage -> send_message.
+All API methods are located in the TeleBot class. Names follow common Python conventions:
+
+KernelGram API kernelbot method
+getMe get_me()
+sendMessage send_message()
+getUpdates get_updates()
+getFile get_file()
 
 Message handlers
 
@@ -104,20 +143,24 @@ def handle_start(message):
 
 Supported filters:
 
-name argument(s) Condition
+Name Argument(s) Condition
 content_types list of strings (default ['text']) True if message.content_type is in the list
 regexp regular expression string True if re.search matches message.text
 commands list of strings True if message.text starts with one of the commands
 chat_types list of chat types True if message.chat.type is in the list
-func lambda or function True if the callable returns True
+func lambda or function reference True if the callable returns True
 
 All handlers are tested in the order in which they were declared.
+
+---
 
 Advanced use of the API
 
 IPv4-only mode
 
-KernelGram's API is served via Cloudflare, which returns both IPv4 and IPv6 addresses. On some mobile networks IPv6 does not reach Cloudflare, causing ClientConnectorDNSError or No route to host. kernelbot forces IPv4 by default. To disable:
+KernelGram's API is served via Cloudflare, which returns both IPv4 and IPv6 addresses. On some mobile networks IPv6 does not reach Cloudflare, causing ClientConnectorDNSError or No route to host.
+
+kernelbot forces IPv4 by default. To disable:
 
 ```python
 from kernelbot import apihelper
@@ -135,9 +178,11 @@ url = apihelper.FILE_URL.format(bot.token, file_info.file_path)
 content = requests.get(url).content
 ```
 
+---
+
 Migrating from telebot
 
-kernelbot mirrors the pyTelegramBotAPI public API. To migrate:
+kernelbot mirrors the pyTelegramBotAPI public API. Migration is two lines:
 
 ```python
 # Before
@@ -150,6 +195,8 @@ bot = kernelbot.TeleBot(TOKEN)
 ```
 
 Everything else — handlers, filters, reply_to, send_message, infinity_polling — works the same.
+
+---
 
 License
 
