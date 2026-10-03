@@ -1,8 +1,4 @@
-"""KernelGram Bot API types, mirroring telebot.types."""
-
-
 class TeleBotBase:
-    """Base class: turns dicts into attribute-accessible objects."""
 
     def __init__(self, **kwargs):
         for key, value in kwargs.items():
