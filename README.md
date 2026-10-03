@@ -1,3 +1,5 @@
+![KernelGram Tutorial Bot](docs/preview.jpg)
+
 # kernelbot
 
 Простая, но расширяемая реализация **KernelGram Bot API** на Python.
