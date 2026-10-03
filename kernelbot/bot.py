@@ -1,5 +1,3 @@
-"""TeleBot class for KernelGram. Mirrors telebot.TeleBot."""
-
 import re
 import time
 import logging
@@ -11,7 +9,6 @@ logger = logging.getLogger("kernelbot")
 
 
 class TeleBot:
-    """Synchronous KernelGram bot, API-compatible with pyTelegramBotAPI."""
 
     def __init__(self, token, parse_mode=None, threaded=True, num_threads=2):
         if not token or not isinstance(token, str):
@@ -24,7 +21,6 @@ class TeleBot:
         self._callback_handlers = []
         self._update_listener = None
 
-    # ---------------- API methods ----------------
 
     def get_me(self):
         return types.User(**apihelper._make_request(self.token, "getMe"))
@@ -201,7 +197,6 @@ class TeleBot:
                         handler["function"](callback)
                         break
 
-    # ---------------- Polling ----------------
 
     def polling(self, interval=0, timeout=20, allowed_updates=None, offset=None):
         offset = offset or self._last_update_id()
