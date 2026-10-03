@@ -1,8 +1,3 @@
-"""Low-level HTTP layer for the KernelGram Bot API.
-
-Mirrors the public surface of `telebot.apihelper`.
-"""
-
 import json
 import socket
 import requests
@@ -12,12 +7,12 @@ from .version import __version__
 
 logger = logging.getLogger("kernelbot")
 
-# --- KernelGram endpoints (hardcoded) ---
+
 API_HOST = "https://api.kernelgram.club"
 API_URL = API_HOST + "/bot{0}/{1}"
 FILE_URL = API_HOST + "/file/bot{0}/{1}"
 
-# --- Behaviour flags ---
+
 CONNECT_TIMEOUT = 3.5
 READ_TIMEOUT = 999
 SESSION_TIME_TO_LIVE = None
@@ -28,7 +23,6 @@ FORCE_IPV4 = True
 CUSTOM_REQUEST_SENDER = None
 proxy = None
 
-# Поля, которые при multipart-запросе KernelGram ожидает как JSON-строку.
 _JSON_FIELDS = ("reply_markup",)
 
 
@@ -69,7 +63,6 @@ def _get_session():
 
 
 def _serialize_for_multipart(params):
-    """Привести dict-параметры к JSON-строкам для multipart-запроса."""
     out = dict(params)
     for key in _JSON_FIELDS:
         if key in out and not isinstance(out[key], str):
@@ -118,7 +111,6 @@ def _make_request(token, method_name, method="get", params=None, files=None, **k
 
 
 class ApiTelegramException(Exception):
-    """Raised when the KernelGram Bot API returns ok=false."""
 
     def __init__(self, function_name, result, payload):
         super().__init__(
