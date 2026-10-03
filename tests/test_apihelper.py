@@ -1,5 +1,3 @@
-"""Basic sanity tests for kernelbot."""
-
 from kernelbot import apihelper
 
 
