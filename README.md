@@ -1,48 +1,51 @@
 # kernelbot
 
-A simple, but extensible Python implementation for the **KernelGram** Bot API.
+Простая, но расширяемая реализация **KernelGram Bot API** на Python.
 
 [![PyPI version](https://img.shields.io/badge/pypi-coming%20soon-lightgrey)](https://pypi.org/project/kernelbot/)
 [![Python](https://img.shields.io/badge/python-3.8%2B-blue)](https://www.python.org/)
 [![License](https://img.shields.io/badge/license-MIT-green)](LICENSE)
 [![KernelGram](https://img.shields.io/badge/platform-KernelGram-2ea44f)](https://kernelgram.club)
 
-`kernelbot` is a drop-in replacement for [`pyTelegramBotAPI`](https://github.com/eternnoir/pyTelegramBotAPI) (telebot), adapted for [KernelGram](https://kernelgram.club) — a Telegram-compatible messenger with its own Bot API server. If you have code written for `telebot`, switch the import and it works.
-
-Supported Bot API version: **KernelGram (Telegram-compatible)**
+`kernelbot` — это замена [`pyTelegramBotAPI`](https://github.com/eternnoir/pyTelegramBotAPI) (telebot), адаптированная для [KernelGram](https://kernelgram.club) — мессенджера по типу телеграма но со своим сервером. Если у вас есть код под `telebot`, достаточно поменять импорт — и он заработает.
 
 ---
 
-## Contents
+## Содержание
 
-- [Official documentation](#official-documentation)
-- [Getting started](#getting-started)
-- [Writing your first bot](#writing-your-first-bot)
-  - [Prerequisites](#prerequisites)
-  - [A simple echo bot](#a-simple-echo-bot)
-- [General API Documentation](#general-api-documentation)
-  - [Types](#types)
-  - [Methods](#methods)
-  - [Message handlers](#message-handlers)
-- [Advanced use of the API](#advanced-use-of-the-api)
-  - [IPv4-only mode](#ipv4-only-mode)
-  - [Downloading files](#downloading-files)
-- [Migrating from telebot](#migrating-from-telebot)
-- [License](#license)
+- [Официальная документация](#официальная-документация)
+- [Установка](#установка)
+- [Первый бот](#первый-бот)
+  - [Что нужно](#что-нужно)
+  - [Простой эхо-бот](#простой-эхо-бот)
+- [Общая документация API](#общая-документация-api)
+  - [Типы](#типы)
+  - [Методы](#методы)
+  - [Обработчики сообщений](#обработчики-сообщений)
+  - [Обработчики callback-запросов](#обработчики-callback-запросов)
+  - [Отправка фото](#отправка-фото)
+  - [Отправка больших сообщений](#отправка-больших-сообщений)
+- [Продвинутое использование](#продвинутое-использование)
+  - [Только IPv4](#только-ipv4)
+  - [Скачивание файлов](#скачивание-файлов)
+  - [Прокси](#прокси)
+- [Ограничения KernelGram](#ограничения-kernelgram)
+- [Переход с telebot](#переход-с-telebot)
+- [Лицензия](#лицензия)
 
 ---
 
-## Official documentation
+## Официальная документация
 
-- KernelGram bots FAQ: https://kernelgram.club/bots
+- FAQ по ботам KernelGram: https://kernelgram.club/bots
 
 ---
 
-## Getting started
+## Установка
 
-This API is tested with Python 3.8+.
+Библиотека протестирована на Python 3.8+.
 
-Install using pip:
+Установка через pip:
 
 ```
 
@@ -50,7 +53,7 @@ pip install kernelbot
 
 ```
 
-Or install from source:
+Или из исходников:
 
 ```
 
@@ -60,17 +63,17 @@ pip install git+https://github.com/ReaalRick/kernelbot.git
 
 ---
 
-## Writing your first bot
+## Первый бот
 
-### Prerequisites
+### Что нужно
 
-You have obtained an API token with `@BotFather` inside the KernelGram app. We will call this token `TOKEN`.
+Токен, полученный у `@BotFather` внутри приложения KernelGram. Назовём его `TOKEN`.
 
-### A simple echo bot
+### Простой эхо-бот
 
-The `TeleBot` class encapsulates all API calls in a single class. It provides functions such as `send_xyz` (`send_message`, `send_document`, etc.) and several ways to listen for incoming messages.
+Класс `TeleBot` инкапсулирует все вызовы API в одном классе. Он предоставляет функции вида `send_xyz` (`send_message`, `send_photo` и другие) и несколько способов слушать входящие сообщения.
 
-Create a file called `echo_bot.py`:
+Создайте файл `echo_bot.py`:
 
 ```python
 import kernelbot
@@ -88,23 +91,21 @@ def echo_all(message):
 bot.infinity_polling()
 ```
 
-To start the bot:
+Запуск:
 
 ```
 python echo_bot.py
 ```
 
-Test it by sending /start and arbitrary text messages.
+Проверьте: отправьте /start и любое текстовое сообщение.
 
 ---
 
-General API Documentation
+### Общая документация API
 
-Types
+Все типы описаны в kernelbot.types. Они соответствуют определениям KernelGram Bot API
 
-All types are defined in kernelbot.types. They follow the KernelGram Bot API definitions, which are compatible with Telegram's.
-
-The Message object has a content_type attribute, one of:
+У объекта Message есть атрибут content_type, одно из значений:
 
 ```
 text, audio, document, animation, photo, sticker, video,
@@ -121,19 +122,26 @@ general_forum_topic_hidden, general_forum_topic_unhidden,
 write_access_allowed, user_shared, chat_shared, story.
 ```
 
-Methods
+У типа Message также есть from_user — KernelGram Bot API возвращает отправителя в поле from, но from — зарезервированное слово в Python, поэтому оно переименовано.
 
-All API methods are located in the TeleBot class. Names follow common Python conventions:
+Методы
 
-KernelGram API kernelbot method
+Все методы API находятся в классе TeleBot. Имена следуют обычным соглашениям Python:
+
+KernelGram API метод kernelbot
 getMe get_me()
 sendMessage send_message()
+sendPhoto send_photo()
+editMessageText edit_message_text()
+editMessageCaption edit_message_caption()
+deleteMessage delete_message()
+answerCallbackQuery answer_callback_query()
 getUpdates get_updates()
 getFile get_file()
 
-Message handlers
+Обработчики сообщений
 
-A message handler is a function decorated with the message_handler decorator of a TeleBot instance:
+Обработчик сообщений — это функция, декорированная message_handler экземпляра TeleBot:
 
 ```python
 @bot.message_handler(commands=['start'])
@@ -141,33 +149,71 @@ def handle_start(message):
     pass
 ```
 
-Supported filters:
+Поддерживаемые фильтры:
 
-Name Argument(s) Condition
-content_types list of strings (default ['text']) True if message.content_type is in the list
-regexp regular expression string True if re.search matches message.text
-commands list of strings True if message.text starts with one of the commands
-chat_types list of chat types True if message.chat.type is in the list
-func lambda or function reference True if the callable returns True
+Имя Аргументы Условие
+content_types список строк (по умолчанию ['text']) True, если message.content_type в списке
+regexp строка регулярного выражения True, если re.search совпадает с message.text
+commands список строк True, если message.text начинается с одной из команд
+chat_types список типов чатов True, если message.chat.type в списке
+func lambda или ссылка на функцию True, если вызываемый объект возвращает True
 
-All handlers are tested in the order in which they were declared.
+Все обработчики проверяются в порядке объявления.
+
+Обработчики callback-запросов
+
+Инлайн-кнопки передаются через reply_markup с полем inline_keyboard:
+
+```python
+@bot.message_handler(commands=["start"])
+def start(message):
+    markup = {
+        "inline_keyboard": [
+            [{"text": "Say hi", "callback_data": "hi"}],
+        ],
+    }
+    bot.send_message(message.chat.id, "Choose:", reply_markup=markup)
+
+
+@bot.callback_query_handler(func=lambda call: call.data == "hi")
+def on_hi(call):
+    bot.answer_callback_query(call.id, text="Hello!")
+    bot.send_message(call.message.chat.id, "Hi there!")
+```
+
+Отправка фото
+
+```python
+with open("photo.jpg", "rb") as f:
+    bot.send_photo(chat_id, f, caption="<b>Look</b>", reply_markup=markup)
+```
+
+Отправка больших сообщений
+
+```python
+from kernelbot import util
+
+large_text = open("large_text.txt", "rb").read()
+for text in util.smart_split(large_text, chars_per_string=3000):
+    bot.send_message(chat_id, text)
+```
 
 ---
 
-Advanced use of the API
+Продвинутое использование
 
-IPv4-only mode
+Только IPv4
 
-KernelGram's API is served via Cloudflare, which returns both IPv4 and IPv6 addresses. On some mobile networks IPv6 does not reach Cloudflare, causing ClientConnectorDNSError or No route to host.
+API KernelGram обслуживается через Cloudflare, который отдаёт и IPv4-, и IPv6-адреса. В некоторых мобильных сетях IPv6 до Cloudflare не доходит, что вызывает ClientConnectorDNSError или No route to host.
 
-kernelbot forces IPv4 by default. To disable:
+kernelbot по умолчанию форсит IPv4. Чтобы отключить:
 
 ```python
 from kernelbot import apihelper
 apihelper.FORCE_IPV4 = False
 ```
 
-Downloading files
+Скачивание файлов
 
 ```python
 import requests
@@ -178,26 +224,45 @@ url = apihelper.FILE_URL.format(bot.token, file_info.file_path)
 content = requests.get(url).content
 ```
 
----
-
-Migrating from telebot
-
-kernelbot mirrors the pyTelegramBotAPI public API. Migration is two lines:
+Прокси
 
 ```python
-# Before
+from kernelbot import apihelper
+apihelper.proxy = {"https": "socks5://user:pass@host:port"}
+```
+
+Требует pip install requests[socks] для SOCKS-прокси.
+
+---
+
+Ограничения KernelGram
+
+Некоторые методы и возможности Telegram Bot API в KernelGram не реализованы или работают иначе:
+
+· setMyProfilePhoto — отсутствует (METHOD_NOT_FOUND). Аватар бота устанавливается через @BotFather.
+· Reply-клавиатуры (reply_markup.keyboard) принимаются API, но не отображаются в клиенте. Используйте инлайн-клавиатуры (reply_markup.inline_keyboard).
+· Все методы set* для профиля бота (имя, описание, команды) доступны только через @BotFather.
+
+---
+
+Переход с telebot
+
+kernelbot повторяет публичный API pyTelegramBotAPI. Для перехода достаточно двух строк:
+
+```python
+# Было
 import telebot
 bot = telebot.TeleBot(TOKEN)
 
-# After
+# Стало
 import kernelbot
 bot = kernelbot.TeleBot(TOKEN)
 ```
 
-Everything else — handlers, filters, reply_to, send_message, infinity_polling — works the same.
+Всё остальное — обработчики, фильтры, reply_to, send_message, infinity_polling — работает так же.
 
 ---
 
-License
+Лицензия
 
-MIT. See LICENSE.
+MIT. См. LICENSE.
